@@ -1,0 +1,18 @@
+{
+  "repo_name": "localflow-official-nodes",
+  "repo_url": "https://github.com/localflow-app/localflow-official-nodes",
+  "snapshot_version": "1.0.0",
+  "snapshot_commit": "",
+  "nodes": [
+    "variable_assign",
+    "variable_calc",
+    "sqlite_connect",
+    "sql_statement",
+    "sqlite_execute",
+    "playwright_script",
+    "table_reader",
+    "table_aggregate",
+    "text_template_render",
+    "clipboard_send"
+  ]
+}
