@@ -1,0 +1,29 @@
+{
+  "node_type": "translate_description",
+  "name": "翻译描述",
+  "description": "根据 GitHub 仓库 description 智能处理：含中文直接用、纯英文则通过 LLM 翻译、空值跳过、中英都有则各取所需",
+  "category": "AI处理",
+  "version": "1.0.0",
+  "entry_file": "node.py",
+  "dependencies": ["requests"],
+  "config_schema": {
+    "llm_api_url": {
+      "type": "string",
+      "label": "LLM API 地址",
+      "description": "OpenAI 兼容接口地址，如 https://api.openai.com/v1/chat/completions",
+      "default": "https://api.openai.com/v1/chat/completions"
+    },
+    "llm_api_key": {
+      "type": "string",
+      "label": "LLM API Key",
+      "description": "API Key",
+      "default": ""
+    },
+    "llm_model": {
+      "type": "string",
+      "label": "模型名称",
+      "description": "如 gpt-4o-mini、deepseek-chat 等",
+      "default": "gpt-4o-mini"
+    }
+  }
+}

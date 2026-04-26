@@ -15,6 +15,7 @@ The official collection of integration nodes for the [LocalFlow](https://github.
   - [目录结构](#目录结构)
   - [node.json 配置文件](#nodejson-配置文件)
   - [node.py 执行脚本](#nodepy-执行脚本)
+  - [进度报告](#进度报告)
   - [manifest.json 仓库清单](#manifestjson-仓库清单)
 - [添加新节点](#添加新节点)
 - [贡献指南](#贡献指南)
@@ -178,6 +179,47 @@ def execute(self, input_data: dict) -> dict:
 3. **读取输入**：通过 `input_data.get("key", default)` 获取上游节点传递的数据
 4. **返回值**：必须返回 `dict`，建议使用 `{**input_data, ...}` 格式以传递上游数据给下游
 5. **依赖声明**：如果使用了第三方库，必须在 `node.json` 的 `dependencies` 中声明，LocalFlow 会自动安装
+6. **进度报告**：对于耗时操作（如循环处理、网络请求），可调用 `report_progress()` 向 UI 报告执行进度
+
+### 进度报告
+
+当节点包含循环、批量网络请求等耗时操作时，可以在 `execute` 方法中调用 `report_progress()` 函数向 UI 实时报告进度，用户将在节点卡片上看到进度条和百分比。
+
+```python
+def report_progress(percent: int, message: str = ""):
+    """
+    报告节点执行进度
+
+    Args:
+        percent: 进度百分比 (0-100)
+        message: 进度描述信息（可选）
+    """
+```
+
+**使用示例：**
+
+```python
+def execute(self, input_data):
+    items = input_data.get("items", [])
+    results = []
+
+    for i, item in enumerate(items):
+        # 处理每个条目...
+        results.append(process(item))
+
+        # 报告进度：百分比 + 描述信息
+        report_progress(int((i + 1) / len(items) * 100), f"处理中 {i+1}/{len(items)}")
+
+    return {**input_data, "results": results}
+```
+
+**注意事项：**
+
+- `percent` 范围为 0-100，超出范围会自动截断
+- `message` 为可选参数，用于在 UI 上显示当前处理步骤的描述
+- `report_progress()` 由 LocalFlow 运行时自动注入，无需 import
+- 进度报告不会影响节点执行性能，可放心在循环中使用
+- 如果节点不调用 `report_progress()`，UI 将显示默认的旋转动画指示器
 
 **实际示例（demo_node）：**
 
@@ -294,6 +336,7 @@ def execute(self, input_data):
         with open(file_path, "r", encoding=encoding) as f:
             reader = csv.reader(f)
             rows = list(reader)
+        report_progress(100, f"读取完成，共 {len(rows)} 行")
         return {
             **input_data,
             "success": True,
@@ -379,6 +422,7 @@ def execute(self, input_data):
 
 - [ ] `node.json` 字段完整且格式正确
 - [ ] `node.py` 包含有效的 `execute(self, input_data)` 方法
+- [ ] 耗时操作（循环、批量请求等）中调用了 `report_progress()` 报告进度
 - [ ] `dependencies` 中声明了所有使用的第三方库
 - [ ] `manifest.json` 已更新，包含新节点
 - [ ] 节点在 LocalFlow 中本地测试通过

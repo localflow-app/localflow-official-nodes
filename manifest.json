@@ -4,6 +4,8 @@
   "snapshot_version": "1.0.0",
   "snapshot_commit": "",
   "nodes": [
-    "demo_node"
+    "demo_node",
+    "github_fetch_description",
+    "translate_description"
   ]
 }
