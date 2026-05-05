@@ -27,7 +27,6 @@ The official collection of integration nodes for the [LocalFlow](https://github.
 
 | 节点类型 | 名称 | 分类 | 说明 |
 |----------|------|------|------|
-| `demo_node` | Demo 节点 | 示例 | 用于验证节点加载流程的示例节点 |
 | `clipboard_send` | 剪贴板发送 | 桌面自动化 | 将文本写入剪贴板并通过快捷键粘贴、发送 |
 
 ---
@@ -221,15 +220,6 @@ def execute(self, input_data):
 - 进度报告不会影响节点执行性能，可放心在循环中使用
 - 如果节点不调用 `report_progress()`，UI 将显示默认的旋转动画指示器
 
-**实际示例（demo_node）：**
-
-```python
-def execute(self, input_data):
-    """Demo 节点 - 输出问候语"""
-    greeting = self.config.get("greeting", "Hello LocalFlow!")
-    return {**input_data, "demo_output": greeting}
-```
-
 **实际示例（clipboard_send）：**
 
 ```python
@@ -262,7 +252,6 @@ def execute(self, input_data):
   "snapshot_version": "1.0.0",
   "snapshot_commit": "",
   "nodes": [
-    "demo_node",
     "clipboard_send"
   ]
 }
@@ -354,7 +343,6 @@ def execute(self, input_data):
 ```json
 {
   "nodes": [
-    "demo_node",
     "clipboard_send",
     "csv_reader"
   ]

@@ -3,7 +3,5 @@
   "repo_url": "https://github.com/localflow-app/localflow-official-nodes",
   "snapshot_version": "1.0.0",
   "snapshot_commit": "",
-  "nodes": [
-    "demo_node"
-  ]
+  "nodes": []
 }
