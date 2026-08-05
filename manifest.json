@@ -1,7 +1,7 @@
 {
-  "repo_name": "localflow-official-nodes",
-  "repo_url": "https://github.com/localflow-app/localflow-official-nodes",
+  "repo_name": "mozikit-official-nodes",
+  "repo_url": "https://github.com/mozikit/mozikit-official-nodes",
   "snapshot_version": "1.0.0",
-  "snapshot_commit": "",
+  "snapshot_commit": "812b95daeb2a84cac048acab2a3eebe40256d73c",
   "nodes": []
 }
