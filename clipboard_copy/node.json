@@ -1,0 +1,20 @@
+{
+  "node_type": "clipboard_copy",
+  "name": "Clipboard Copy",
+  "description": "Copy a local text or HTML file to the system clipboard.",
+  "category": "桌面自动化",
+  "version": "1.0.0",
+  "entry_file": "node.py",
+  "dependencies": [],
+  "config_schema": {
+    "source_path_var": {"type": "string", "label": "路径变量", "default": "path"},
+    "source_path": {"type": "string", "label": "文件路径（可选）", "semantic_type": "file_path", "default": ""},
+    "output_var": {"type": "string", "label": "输出变量", "default": "path"}
+  },
+  "input_schema": {
+    "path": {"type": "string", "semantic_type": "file_path", "from_config": "source_path_var"}
+  },
+  "output_schema": {
+    "path": {"type": "string", "semantic_type": "file_path", "from_config": "output_var"}
+  }
+}

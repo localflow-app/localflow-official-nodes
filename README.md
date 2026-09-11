@@ -1,10 +1,10 @@
-# localflow-official-nodes
+# mozikit-official-nodes
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-为 [LocalFlow](https://github.com/localflow-app/localflow) 工作流引擎提供的官方集成节点集合。
+为 [Mozikit](https://github.com/mozikit/mozikit) 工作流引擎提供的官方节点集合。
 
-The official collection of integration nodes for the [LocalFlow](https://github.com/localflow-app/localflow) workflow engine.
+The official collection of nodes for the [Mozikit](https://github.com/mozikit/mozikit) workflow engine.
 
 ---
 
@@ -27,7 +27,9 @@ The official collection of integration nodes for the [LocalFlow](https://github.
 
 | 节点类型 | 名称 | 分类 | 说明 |
 |----------|------|------|------|
-| `clipboard_send` | 剪贴板发送 | 桌面自动化 | 将文本写入剪贴板并通过快捷键粘贴、发送 |
+| `clipboard_send` | 剪贴板发送 | 桌面自动化 | 兼容旧工作流的复制、粘贴和发送组合行为 |
+| `rich_text` | 富文本 | 文件与内容 | 将富文本渲染为标准 HTML 文件 |
+| `clipboard_copy` | 复制到剪贴板 | 桌面自动化 | 将本地文本或 HTML 文件复制到系统剪贴板 |
 
 ---
 
@@ -177,7 +179,7 @@ def execute(self, input_data: dict) -> dict:
 2. **读取配置**：通过 `self.config.get("key", default)` 获取 `config_schema` 中定义的运行时配置值
 3. **读取输入**：通过 `input_data.get("key", default)` 获取上游节点传递的数据
 4. **返回值**：必须返回 `dict`，建议使用 `{**input_data, ...}` 格式以传递上游数据给下游
-5. **依赖声明**：如果使用了第三方库，必须在 `node.json` 的 `dependencies` 中声明，LocalFlow 会自动安装
+5. **依赖声明**：如果使用了第三方库，必须在 `node.json` 的 `dependencies` 中声明，Mozikit 会自动安装
 6. **进度报告**：对于耗时操作（如循环处理、网络请求），可调用 `report_progress()` 向 UI 报告执行进度
 
 ### 进度报告
@@ -216,7 +218,7 @@ def execute(self, input_data):
 
 - `percent` 范围为 0-100，超出范围会自动截断
 - `message` 为可选参数，用于在 UI 上显示当前处理步骤的描述
-- `report_progress()` 由 LocalFlow 运行时自动注入，无需 import
+- `report_progress()` 由 Mozikit 运行时自动注入，无需 import
 - 进度报告不会影响节点执行性能，可放心在循环中使用
 - 如果节点不调用 `report_progress()`，UI 将显示默认的旋转动画指示器
 
@@ -247,13 +249,14 @@ def execute(self, input_data):
 
 ```json
 {
-  "repo_name": "localflow-official-nodes",
-  "repo_url": "https://github.com/localflow-app/localflow-official-nodes",
-  "snapshot_version": "1.0.0",
-  "snapshot_commit": "",
-  "nodes": [
-    "clipboard_send"
-  ]
+  "repo_name": "mozikit-official-nodes",
+  "repo_url": "https://github.com/mozikit/mozikit-official-nodes",
+  "repo_version": "1.1.0",
+  "snapshot_commit": "<commit-sha>",
+  "nodes": {
+    "clipboard_send": {"versions": [{"version": "1.0.0", "files": {"node.json": {"hash": "..."}, "node.py": {"hash": "..."}}}]},
+    "rich_text": {"versions": [{"version": "1.0.0", "files": {"node.json": {"hash": "..."}, "node.py": {"hash": "..."}}}]}
+  }
 }
 ```
 
@@ -261,11 +264,11 @@ def execute(self, input_data):
 |------|------|
 | `repo_name` | 仓库名称 |
 | `repo_url` | 仓库 URL |
-| `snapshot_version` | 快照版本号 |
+| `repo_version` | 节点仓库版本号 |
 | `snapshot_commit` | 快照对应的 Git commit SHA |
-| `nodes` | 所有节点类型的列表（与各节点目录名一致） |
+| `nodes` | 以节点类型为键的版本清单；每个版本列出文件及 SHA-256 |
 
-> **重要**：添加新节点后，务必更新 `manifest.json` 的 `nodes` 数组，将新节点的 `node_type` 加入其中，否则 LocalFlow 无法发现该节点。
+> **重要**：添加新节点后，务必更新 `manifest.json` 的 `nodes` 对象，否则 Mozikit 无法发现该节点。
 
 ---
 
@@ -338,20 +341,21 @@ def execute(self, input_data):
 
 ### 4. 更新 manifest.json
 
-在 `manifest.json` 的 `nodes` 数组中添加 `"csv_reader"`：
+在 `manifest.json` 的 `nodes` 对象中添加 `csv_reader` 及其文件哈希：
 
 ```json
 {
-  "nodes": [
-    "clipboard_send",
-    "csv_reader"
-  ]
+  "nodes": {
+    "csv_reader": {
+      "versions": [{"version": "1.0.0", "files": {"node.json": {"hash": "..."}, "node.py": {"hash": "..."}}}]
+    }
+  }
 }
 ```
 
 ### 5. 本地测试
 
-在 LocalFlow 中，将节点目录复制到 `user_data/official_nodes/` 下，重启应用即可在节点浏览器中看到新节点。
+在 Mozikit 中，将节点目录复制到 `user_data/official_nodes/` 下，重启应用即可在节点浏览器中看到新节点。
 
 ---
 
@@ -371,16 +375,16 @@ def execute(self, input_data):
 1. **Fork 本仓库** — 点击右上角 Fork 按钮
 2. **克隆到本地**
    ```bash
-   git clone https://github.com/<your-username>/localflow-official-nodes.git
-   cd localflow-official-nodes
+   git clone https://github.com/<your-username>/mozikit-official-nodes.git
+   cd mozikit-official-nodes
    ```
 3. **创建特性分支**
    ```bash
    git checkout -b feature/your-new-node
    ```
 4. **添加或修改节点** — 遵循[节点标准格式](#节点标准格式)
-5. **更新 manifest.json** — 将新节点加入 `nodes` 数组
-6. **本地测试** — 将节点放入 LocalFlow 的 `user_data/official_nodes/` 目录验证功能
+5. **更新 manifest.json** — 将新节点加入 `nodes` 对象并记录文件哈希
+6. **本地测试** — 将节点放入 Mozikit 的 `user_data/official_nodes/` 目录验证功能
 7. **提交更改**
    ```bash
    git add .
@@ -413,7 +417,7 @@ def execute(self, input_data):
 - [ ] 耗时操作（循环、批量请求等）中调用了 `report_progress()` 报告进度
 - [ ] `dependencies` 中声明了所有使用的第三方库
 - [ ] `manifest.json` 已更新，包含新节点
-- [ ] 节点在 LocalFlow 中本地测试通过
+- [ ] 节点在 Mozikit 中本地测试通过
 - [ ] `node_type` 与目录名一致，使用蛇形命名
 - [ ] 没有硬编码的密钥或敏感信息
 

@@ -1,7 +1,10 @@
 {
   "repo_name": "mozikit-official-nodes",
   "repo_url": "https://github.com/mozikit/mozikit-official-nodes",
-  "snapshot_version": "1.0.0",
-  "snapshot_commit": "812b95daeb2a84cac048acab2a3eebe40256d73c",
-  "nodes": []
+  "repo_version": "1.1.0",
+  "snapshot_commit": "f648e889a22b155b09a9bdbef40f43dd8f4c90a4",
+  "nodes": {
+    "rich_text": {"versions": [{"version": "1.0.0", "files": {"node.json": {"hash": "A527C1421FED5047A12339032871BDD2F9948F6ECE0581739212E144FBD3DD0C"}, "node.py": {"hash": "488F9CEB36BEFCD83876F26863B9161436558AC9DB566AF6979AC46792FBA274"}}}]},
+    "clipboard_copy": {"versions": [{"version": "1.0.0", "files": {"node.json": {"hash": "A90407E1FBCD30E9C9CA6039300F662AFFC65F9B8B255899048A853496E26989"}, "node.py": {"hash": "E367BB37A8615D5B1398785B423C7DF84AF97C1C09293D936F1DE84D5AF17C8A"}}}]}
+  }
 }
